@@ -1,8 +1,9 @@
 import Job from '../../models/job.model.js';
+import Company from '../../models/company.model.js';
 
 export default async function postJob(req, res) {
   try {
-    const companyId = req.userId; // assuming company is authenticated via middleware
+    const companyId = req.userId; // set by auth middleware
 
     const {
       title,
@@ -16,11 +17,12 @@ export default async function postJob(req, res) {
       status,
     } = req.body;
 
+    // Create and save the job
     const job = new Job({
       company: companyId,
       title,
       description,
-      qualifications: qualifications.split(',').map(q => q.trim()), // store as array
+      qualifications: qualifications || [],
       experienceRequired,
       location,
       salary,
@@ -30,6 +32,12 @@ export default async function postJob(req, res) {
     });
 
     await job.save();
+
+    // Push job ID into the company's jobsPosted array
+    await Company.findByIdAndUpdate(
+      companyId,
+      { $push: { jobsPosted: job._id } }
+    );
 
     res.status(201).json({
       message: 'Job posted successfully',

@@ -38,8 +38,9 @@ export default async function searchProfiles(req, res) {
       searchCriteria[key] = new RegExp(`^${value}$`, 'i');
     }
 
-    const users = await User.find(searchCriteria).select('-password');
-
+    const users = await User.find(searchCriteria).select('-password -_id');
+// Exclude password and appliedJobs from results
+    console.log(users)
     res.status(200).json({
       message: 'Search results',
       users,

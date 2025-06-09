@@ -28,7 +28,7 @@ const router = express.Router();
 router.post('/signup', validate(signupSchema), signup);
 router.post('/verify-otp', validate(verifyOtpSchema), verifyOtp);
 router.post('/login', validate(loginSchema), login);
-router.post('/logout', logout);
+router.post('/logout', verifyToken, logout);
 router.get('/profile', verifyToken, getProfile);
 router.put('/profile', verifyToken, validate(updateProfileSchema), updateProfile);
 router.post('/profile/image', verifyToken, upload.single('image'), uploadImage);

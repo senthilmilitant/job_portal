@@ -17,9 +17,9 @@ export default async function login(req, res) {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: 'user' },
+      { id: user._id, role: 'user', isPremium: user.isPremium },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '7d'}
     );
 
     res.status(200).json({

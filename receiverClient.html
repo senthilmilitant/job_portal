@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Receiver Client</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>Receiver Client</h2>
+  <div id="messages"></div>
+
+  <script>
+    const socket = io('http://localhost:5500', {
+      auth: {
+        token: "Bearer "
+      }
+    });
+
+    socket.on('connect', () => {
+      console.log('Receiver connected to Socket.IO');
+    });
+
+    socket.on('receiveMessage', (message) => {
+      console.log('Received message:', message);
+      const messageBox = document.getElementById('messages');
+      const p = document.createElement('p');
+      p.textContent = `${message.senderModel}: ${message.content}`;
+      messageBox.appendChild(p);
+    });
+  </script>
+</body>
+</html>

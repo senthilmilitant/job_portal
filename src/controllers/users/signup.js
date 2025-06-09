@@ -12,15 +12,15 @@ export default async function userSignup(req, res) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-
+// Generate OTP
     const otp = generateOtp();
 
-    await Otp.findOneAndUpdate(
+await Otp.findOneAndUpdate(
       { email },
       { email, otp },
       { upsert: true, new: true }
     );
-
+    
     await sendEmail(email, 'OTP Verification', `Your OTP is ${otp}`);
 
     res.status(200).json({ message: 'OTP sent successfully' });

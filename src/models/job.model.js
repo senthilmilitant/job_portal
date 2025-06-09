@@ -36,11 +36,10 @@ const jobSchema = new mongoose.Schema({
     default: Date.now,
   },
   applicants: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-  ],
+    { type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+   }
+ ],
   status: {
     type: String,
     enum: ['open', 'closed'],

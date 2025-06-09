@@ -1,9 +1,17 @@
-export default async function logout(req, res) {
-  try {
-    // On client, token is usually removed — on server you can optionally blacklist it (Redis, DB, etc.)
-    res.status(200).json({ message: 'Logout successful' });
-  } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
+import jwt from 'jsonwebtoken';  
+import BlacklistedToken from '../../models/blacklistedToken.model.js';
+
+const logout = async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) return res.status(400).json({ message: 'No token provided' });
+
+  const decoded = jwt.decode(token);
+  const expiry = new Date(decoded.exp * 1000);
+
+  await BlacklistedToken.create({ token, expiresAt: expiry });
+
+  res.status(200).json({ message: 'Successfully logged out' });
+};
+
+export default logout;

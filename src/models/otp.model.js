@@ -6,7 +6,6 @@ const otpSchema = new mongoose.Schema({
     type: String,
     required: true,
     lowercase: true,
-    index: true, // For faster lookup by email
   },
   otp: {
     type: String,

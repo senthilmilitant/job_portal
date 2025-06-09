@@ -3,7 +3,7 @@ import Job from '../../models/job.model.js';
 export default async function listJobs(req, res) {
   try {
     const jobs = await Job.find({ status: 'open' }).populate('company', 'name email');
-
+    console.log('Jobs fetched:', jobs);
     res.status(200).json({
       message: 'All open jobs fetched successfully',
       jobs,
